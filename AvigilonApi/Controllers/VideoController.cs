@@ -17,7 +17,7 @@
         public readonly string lrf = "4xIx1DMwMLSwMDVMMk9OMdFLTsw1MBASkIsQPdOy12nPRp7ZvgcfBs0CAA";
         private string? _session;
         [HttpGet("/Cameras")]
-        public async Task<List<Gralin.Avigilon.ControlCenterAPI.DataContracts.CameraContract>> GetVideos()
+        public async Task<List<CameraContract>> GetVideos()
         {
             var factory = new WebEndpointClientFactory(_configuration.GetValue("Avigilon:Secretkeys:Usernonce", "Usernonce"),
                 _configuration.GetValue("Avigilon:Secretkeys:Userkey", "Usernonce"));
@@ -34,7 +34,12 @@
         public async Task<IActionResult> GetViedoFromApi([FromRoute] string date, [FromRoute] string time, [FromRoute] string camera)
         {
             if (_session == null || _session == "")
-               _session = await _tokenProvider.GenerateSessionTokenAsync();
+               _session = await _tokenProvider.GenerateSessionTokenAsync(
+                   _configuration.GetValue("Avigilon:Secretkeys:Usernonce", "Usernonce"),
+                   _configuration.GetValue("Avigilon:Secretkeys:Userkey", "Userkey"),
+                   _configuration.GetValue("Avigilon:Login:Username", "Username"),
+                   _configuration.GetValue("Avigilon:Login:Password", "Password"),
+                   clientName);
 
             var httpClient = _httpClientProivider.GetHttpClient();
             httpClient.DefaultRequestHeaders.Add("Authorization", "x-avg-session " + _session);

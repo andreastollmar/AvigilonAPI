@@ -1,19 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-
-namespace AvigilonApi.Services
+﻿namespace Avigilon.Infrastructure.Services
 {
-    public class TokenProvider(HttpClientProivider clientProivider, IConfiguration configuration)
+    public class TokenProvider(HttpClientProivider clientProivider)
     {
         private readonly HttpClientProivider _clientProivider = clientProivider;
-        private readonly IConfiguration _configuration = configuration;
 
-        public async Task<string> GenerateSessionTokenAsync()
+        public async Task<string> GenerateSessionTokenAsync(string userNonce, string userKey, string userName, string userPassword, string clientName)
         {
             var httpClient = _clientProivider.GetHttpClient();
 
-            var generator = new AuthTokenGenerator(_configuration.GetValue("Avigilon:Secretkeys:Usernonce", "Usernonce"),
-                _configuration.GetValue("Avigilon:Secretkeys:Userkey", "Userkey"));
+            var generator = new AuthTokenGenerator(userNonce, userKey);
             var authToken = generator.GenerateToken();
             Uri requestUri = new Uri("https://srv03367:8443/mt/api/rest/v1/login");
 
@@ -26,9 +21,9 @@ namespace AvigilonApi.Services
             string bodyContent = JsonSerializer.Serialize(new LoginRequestContract
             {
                 AuthorizationToken = authToken,
-                Username = _configuration.GetValue("Avigilon:Login:Username", "Username"),
-                Password = _configuration.GetValue("Avigilon:Login:Password", "Password"),
-                ClientName = _configuration.GetValue("Avigilon:Secretkeys:Clientname", "Clientname")
+                Username = userName,
+                Password = userPassword,
+                ClientName = clientName
             }, serializerSettings);
 
             StringContent content = new StringContent(bodyContent, Encoding.UTF8, "application/json");

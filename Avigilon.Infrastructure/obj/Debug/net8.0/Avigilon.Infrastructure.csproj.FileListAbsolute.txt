@@ -1,0 +1,13 @@
+C:\Users\usr002862\source\repos\avigilionAPI\AvigilonApi\Avigilon.Infrastructure\obj\Debug\net8.0\Avigilon.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\usr002862\source\repos\avigilionAPI\AvigilonApi\Avigilon.Infrastructure\obj\Debug\net8.0\Avigilon.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\usr002862\source\repos\avigilionAPI\AvigilonApi\Avigilon.Infrastructure\obj\Debug\net8.0\Avigilon.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\usr002862\source\repos\avigilionAPI\AvigilonApi\Avigilon.Infrastructure\obj\Debug\net8.0\Avigilon.Infrastructure.AssemblyInfo.cs
+C:\Users\usr002862\source\repos\avigilionAPI\AvigilonApi\Avigilon.Infrastructure\obj\Debug\net8.0\Avigilon.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\usr002862\source\repos\avigilionAPI\AvigilonApi\Avigilon.Infrastructure\obj\Debug\net8.0\Avigilon.Infrastructure.sourcelink.json
+C:\Users\usr002862\source\repos\avigilionAPI\AvigilonApi\Avigilon.Infrastructure\bin\Debug\net8.0\Avigilon.Infrastructure.deps.json
+C:\Users\usr002862\source\repos\avigilionAPI\AvigilonApi\Avigilon.Infrastructure\bin\Debug\net8.0\Avigilon.Infrastructure.dll
+C:\Users\usr002862\source\repos\avigilionAPI\AvigilonApi\Avigilon.Infrastructure\bin\Debug\net8.0\Avigilon.Infrastructure.pdb
+C:\Users\usr002862\source\repos\avigilionAPI\AvigilonApi\Avigilon.Infrastructure\obj\Debug\net8.0\Avigilon.Infrastructure.dll
+C:\Users\usr002862\source\repos\avigilionAPI\AvigilonApi\Avigilon.Infrastructure\obj\Debug\net8.0\refint\Avigilon.Infrastructure.dll
+C:\Users\usr002862\source\repos\avigilionAPI\AvigilonApi\Avigilon.Infrastructure\obj\Debug\net8.0\Avigilon.Infrastructure.pdb
+C:\Users\usr002862\source\repos\avigilionAPI\AvigilonApi\Avigilon.Infrastructure\obj\Debug\net8.0\ref\Avigilon.Infrastructure.dll

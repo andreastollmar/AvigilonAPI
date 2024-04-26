@@ -1,4 +1,4 @@
-﻿namespace AvigilonApi.Models
+﻿namespace Avigilon.Core.Models
 {
     public class MediaContract
     {
