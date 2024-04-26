@@ -1,14 +1,8 @@
 ﻿global using Gralin.Avigilon.ControlCenterAPI;
 global using Gralin.Avigilon.ControlCenterAPI.DataContracts;
-global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
 global using System.Net.Http;
 global using System.Text.Json;
-global using System.Text;
-global using Microsoft.AspNetCore.Razor.TagHelpers;
-global using System.Net.Security;
-global using System.Security.Cryptography.X509Certificates;
 global using System.IO;
-global using Microsoft.AspNetCore.Components;
 global using Avigilon.Core.Models;
 global using Avigilon.Infrastructure.Services;
