@@ -15,17 +15,17 @@ appsettings.Development.json
 *.userprefs
 
 # Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
+AvigilonApi/[Dd]ebug/
+AvigilonApi/[Dd]ebugPublic/
+AvigilonApi/[Rr]elease/
+AvigilonApi/[Rr]eleases/
 x64/
 x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-[Bb]in/
-[Oo]bj/
+AvigilonApi/[Bb]in/
+AvigilonApi/[Oo]bj/
 [Ll]og/
 
 # Visual Studio 2015/2017 cache/options directory
