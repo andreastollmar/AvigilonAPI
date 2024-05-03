@@ -32,6 +32,8 @@ Avigilon.Core/[Oo]bj/
 Avigilon.Infrastructure/[Bb]in/
 Avigilon.Infrastructure/[Oo]bj/
 [Ll]og/
+**/[Bb]in/
+**/[Oo]bj
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
