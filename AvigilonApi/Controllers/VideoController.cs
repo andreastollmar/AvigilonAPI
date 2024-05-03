@@ -89,7 +89,41 @@
 
 
             return Ok(responseString);
-        }     
+        }
+
+        [HttpGet("/getList {intervallInSeconds} {startDateTime} {endDateTime} {camera}")]
+        public async Task<IActionResult> GetListOfEntities([FromRoute] string intervallInSeconds, 
+                                                            [FromRoute] string startDateTime,
+                                                            [FromRoute] string endDateTime,
+                                                            [FromRoute] string camera)
+        {
+            if (_session == null || _session == "")
+                _session = await _tokenProvider.GenerateSessionTokenAsync(
+                    _configuration.GetValue("Avigilon:Secretkeys:Usernonce", "Usernonce"),
+                    _configuration.GetValue("Avigilon:Secretkeys:Userkey", "Userkey"),
+                    _configuration.GetValue("Avigilon:Login:Username", "Username"),
+                    _configuration.GetValue("Avigilon:Login:Password", "Password"),
+                    clientName);
+
+            string[] cameraIds = [vd1, vd2, lrf];
+            var cameraId = camera.ToLower().Equals("vd1") ? vd1 : camera.ToLower().Equals("vd2") ? vd2 : lrf;
+
+            var httpClient = _httpClientProivider.GetHttpClient();
+            httpClient.DefaultRequestHeaders.Add("Authorization", "x-avg-session " + _session);
+
+            Uri requestUri = new Uri(baseUri + $"timeline?session={_session}&cameraIds{cameraId}&scope={intervallInSeconds}_SECONDS&start={startDateTime}T06:00:00.0&end{endDateTime}T06:00:00.0&storage=ALL");
+
+            HttpResponseMessage httpResponseMessage = await httpClient.GetAsync(requestUri);
+            if (!httpResponseMessage.IsSuccessStatusCode)
+            {
+                throw new Exception($"Failed to get list of entrys: response status code was {httpResponseMessage.StatusCode}");
+            }
+
+            var responseString = await httpResponseMessage.Content.ReadAsStringAsync();
+            var message = JsonSerializer.Deserialize<TimeLineResult>(responseString);
+
+            return Ok(message.Result.Timelines);
+        }
 
     }
 }

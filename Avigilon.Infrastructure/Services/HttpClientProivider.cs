@@ -1,6 +1,4 @@
-﻿
-
-namespace Avigilon.Infrastructure.Services
+﻿namespace Avigilon.Infrastructure.Services
 {
     public class HttpClientProivider
     {
