@@ -111,7 +111,7 @@
             var httpClient = _httpClientProivider.GetHttpClient();
             httpClient.DefaultRequestHeaders.Add("Authorization", "x-avg-session " + _session);
 
-            Uri requestUri = new Uri(baseUri + $"timeline?session={_session}&cameraIds{cameraId}&scope={intervallInSeconds}_SECONDS&start={startDateTime}T06:00:00.0&end{endDateTime}T06:00:00.0&storage=ALL");
+            Uri requestUri = new Uri(baseUri + $"timeline?session={_session}&cameraIds={cameraId}&scope={intervallInSeconds}_SECONDS&start={startDateTime}T06:00:00.0&end{endDateTime}T06:00:00.0&storage=ALL");
 
             HttpResponseMessage httpResponseMessage = await httpClient.GetAsync(requestUri);
             if (!httpResponseMessage.IsSuccessStatusCode)
