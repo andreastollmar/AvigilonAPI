@@ -10,6 +10,7 @@
 *.userosscache
 *.sln.docstates
 appsettings.Development.json
+AvigilonApi.Images
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -26,6 +27,10 @@ x86/
 bld/
 AvigilonApi/[Bb]in/
 AvigilonApi/[Oo]bj/
+Avigilon.Core/[Bb]in/
+Avigilon.Core/[Oo]bj/
+Avigilon.Infrastructure/[Bb]in/
+Avigilon.Infrastructure/[Oo]bj/
 [Ll]og/
 
 # Visual Studio 2015/2017 cache/options directory
