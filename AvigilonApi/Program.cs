@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<HttpClientProivider>();
 builder.Services.AddScoped<TokenProvider>();
+builder.Services.AddScoped<HandleMediaResponse>();
 
 
 
