@@ -34,7 +34,7 @@
         }        
 
         [HttpGet("/mediaQuery {date} {time} {camera} {isImg}")]
-        public async Task<IActionResult> GetVideoFromApi([FromRoute] string date, [FromRoute] string time, [FromRoute] string camera, [FromRoute] bool isImg)
+        public async Task<IActionResult> GetMediaFromApi([FromRoute] string date, [FromRoute] string time, [FromRoute] string camera, [FromRoute] bool isImg)
         {
             if (_session == null || _session == "")
                _session = await _tokenProvider.GenerateSessionTokenAsync(
@@ -65,7 +65,6 @@
                 T = dateTime
             });
             Uri requestUri = new Uri(baseUri + $"media?session={content.Session}&cameraId={content.CameraId}&format={content.Format}&t={content.T}");
-            Uri requestUri2 = new Uri(baseUri + $"media?session={content.Session}&cameraId={content.CameraId}&format=jpeg&t=live");
 
             HttpResponseMessage httpResponseMessage = await httpClient.GetAsync(requestUri);
             if (!httpResponseMessage.IsSuccessStatusCode)

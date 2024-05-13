@@ -5,17 +5,16 @@ public class HandleMediaResponse
     public async Task<bool> SaveMediaResponse(string camera, byte[] mediaData, bool isImg)
     {
         var userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        var downloadsFolderPath = Path.Combine(userProfilePath, "Downloads"); // Get the downloadsfolder
+        var downloadsFolderPath = Path.Combine(userProfilePath, "Downloads");
         if (isImg)
         {
-            var directoryPath = "../AvigilonApi/Images/"; // Change to downloads or another specific folder
-            if (!Directory.Exists(directoryPath))
+            if (!Directory.Exists(downloadsFolderPath))
             {
-                Directory.CreateDirectory(directoryPath);
+                Directory.CreateDirectory(downloadsFolderPath);
             }
             var fileName = $"{camera}_" + DateTime.Now.ToShortTimeString() + ".jpeg";
             fileName = fileName.Replace(":", "_");
-            string filePath = Path.Combine(directoryPath, fileName);
+            string filePath = Path.Combine(downloadsFolderPath, fileName);
 
             using (var fs = new FileStream(filePath, FileMode.Create))
             {
@@ -24,14 +23,13 @@ public class HandleMediaResponse
         }
         else
         {
-            var directoryPath = "../AvigilonApi/Videos/";
-            if (!Directory.Exists(directoryPath))
+            if (!Directory.Exists(downloadsFolderPath))
             {
-                Directory.CreateDirectory(directoryPath);
+                Directory.CreateDirectory(downloadsFolderPath);
             }
             var fileName = $"{camera}_" + DateTime.Now.ToShortTimeString() + ".mp4";
             fileName = fileName.Replace(":", "_");
-            string filePath = Path.Combine(directoryPath, fileName);
+            string filePath = Path.Combine(downloadsFolderPath, fileName);
 
             using (var fs = new FileStream(filePath, FileMode.Create))
             {
