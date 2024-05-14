@@ -8,7 +8,7 @@ export type CameraTimeline = {
     motion: Record[]
 }
 
-type Record = {
+export type Record = {
     start: string,
     end: string
 }
