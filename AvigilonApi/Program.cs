@@ -13,6 +13,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(o => o.AddPolicy("AllowAllOrigins",
+  policy =>
+  {
+      policy.AllowAnyHeader()
+      .AllowAnyMethod()
+      .AllowAnyOrigin();
+  }));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,6 +29,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("AllowAllOrigins");
 
 app.UseHttpsRedirection();
 
