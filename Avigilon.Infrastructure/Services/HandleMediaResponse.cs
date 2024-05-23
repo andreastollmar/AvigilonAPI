@@ -1,6 +1,6 @@
 ﻿namespace Avigilon.Infrastructure.Services;
 
-public class HandleMediaResponse
+public class HandleMediaResponse : IHandleMediaResponse
 {
     public async Task<bool> SaveMediaResponse(string camera, byte[] mediaData, bool isImg)
     {
