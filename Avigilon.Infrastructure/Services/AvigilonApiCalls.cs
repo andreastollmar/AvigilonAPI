@@ -1,15 +1,12 @@
-﻿using Avigilon.Core.Interfaces;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.ComponentModel;
-
-namespace Avigilon.Infrastructure.Services;
-public class AvigilonApiCalls(IHttpClientProvider httpClientProivider, IHandleMediaResponse handleMediaResponse)
+﻿namespace Avigilon.Infrastructure.Services;
+public class AvigilonApiCalls(IHttpClientProvider httpClientProivider, IHandleMediaResponse handleMediaResponse) : IAvigilonApiCalls
 {
     public readonly string clientName = "WebEndpointClient";
     public readonly string baseUri = "https://srv03367:8443/mt/api/rest/v1/";
     public readonly string vd1 = "4xIx1DMwMLSwMDUxsTRJStRLTsw1MBASyP2n63D3r8-t3Qtf2Uer7GkBAA";
     public readonly string vd2 = "4xIx1DMwMLSwMDUxsTRJStRLTsw1MBQSyP2n63D3r8-t3Qtf2Uer7GkBAA";
     public readonly string lrf = "4xIx1DMwMLSwMDVMMk9OMdFLTsw1MBASkIsQPdOy12nPRp7ZvgcfBs0CAA";
+
     private readonly IHttpClientProvider _httpClientProvider = httpClientProivider;
     private readonly IHandleMediaResponse _handleMediaResponse = handleMediaResponse;
 

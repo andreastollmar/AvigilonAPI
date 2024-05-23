@@ -3,21 +3,13 @@
     [Microsoft.AspNetCore.Components.Route("api/[controller]")]
     [ApiController]
     public class VideoController(IConfiguration configuration, 
-                                IHttpClientProvider httpClientProivider,
                                 ITokenProvider tokenProvider,
-                                IHandleMediaResponse handleMediaResponse,
-                                AvigilonApiCalls avigilonApiCalls) : ControllerBase
+                                IAvigilonApiCalls avigilonApiCalls) : ControllerBase
     {
         private readonly IConfiguration _configuration = configuration;
-        private readonly IHttpClientProvider _httpClientProivider = httpClientProivider;
         private readonly ITokenProvider _tokenProvider = tokenProvider;
-        private readonly IHandleMediaResponse _handleMediaResponse = handleMediaResponse;
-        private readonly AvigilonApiCalls _avigilonApiCalls = avigilonApiCalls;
+        private readonly IAvigilonApiCalls _avigilonApiCalls = avigilonApiCalls;
         public readonly string clientName = "WebEndpointClient";
-        public readonly string baseUri = "https://srv03367:8443/mt/api/rest/v1/";
-        public readonly string vd1 = "4xIx1DMwMLSwMDUxsTRJStRLTsw1MBASyP2n63D3r8-t3Qtf2Uer7GkBAA";
-        public readonly string vd2 = "4xIx1DMwMLSwMDUxsTRJStRLTsw1MBQSyP2n63D3r8-t3Qtf2Uer7GkBAA";
-        public readonly string lrf = "4xIx1DMwMLSwMDVMMk9OMdFLTsw1MBASkIsQPdOy12nPRp7ZvgcfBs0CAA";
         private string? _session;
 
         [HttpGet("/Cameras")]

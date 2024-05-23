@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IHttpClientProvider, HttpClientProvider>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IHandleMediaResponse, HandleMediaResponse>();
-builder.Services.AddScoped<AvigilonApiCalls>();
+builder.Services.AddScoped<IAvigilonApiCalls, AvigilonApiCalls>();
 
 
 
