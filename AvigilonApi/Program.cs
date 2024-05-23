@@ -5,9 +5,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddScoped<IHttpClientProvider, HttpClientProivider>();
+builder.Services.AddScoped<IHttpClientProvider, HttpClientProvider>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IHandleMediaResponse, HandleMediaResponse>();
+builder.Services.AddScoped<AvigilonApiCalls>();
 
 
 

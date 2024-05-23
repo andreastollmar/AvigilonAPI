@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v8.0": {
       "Avigilon.Infrastructure/1.0.0": {
         "dependencies": {
+          "Avigilon.Core": "1.0.0",
           "Gralin.Avigilon.ControlCenterAPI": "0.0.1"
         },
         "runtime": {
@@ -44,6 +45,11 @@
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0",
           "System.Text.Encodings.Web": "6.0.0"
+        }
+      },
+      "Avigilon.Core/1.0.0": {
+        "runtime": {
+          "Avigilon.Core.dll": {}
         }
       }
     }
@@ -88,6 +94,11 @@
       "sha512": "sha512-0nE2gwXLn3PTBOPwORLqwuYvWB+Beomt9ZBX+6LmogMNKUvfD1SoDb/ycB1vBntT94rGaB/SvxEyeLu14H6aEg==",
       "path": "system.text.json/6.0.2",
       "hashPath": "system.text.json.6.0.2.nupkg.sha512"
+    },
+    "Avigilon.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

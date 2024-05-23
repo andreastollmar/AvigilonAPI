@@ -5,4 +5,5 @@ global using System.Net.Http;
 global using System.Text.Json;
 global using System.IO;
 global using Avigilon.Core.Models;
+global using Avigilon.Core.Interfaces;
 global using Avigilon.Infrastructure.Services;

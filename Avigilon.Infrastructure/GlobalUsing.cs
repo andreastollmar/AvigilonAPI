@@ -4,3 +4,5 @@ global using Gralin.Avigilon.ControlCenterAPI.DataContracts;
 global using System.Text;
 global using System.Net.Security;
 global using System.Security.Cryptography.X509Certificates;
+global using Avigilon.Core.Interfaces;
+global using Avigilon.Core.Models;

@@ -10,4 +10,8 @@
     <PackageReference Include="Gralin.Avigilon.ControlCenterAPI" Version="0.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Avigilon.Core\Avigilon.Core.csproj" />
+  </ItemGroup>
+
 </Project>
