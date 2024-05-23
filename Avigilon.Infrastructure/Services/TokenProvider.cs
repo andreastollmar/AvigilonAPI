@@ -1,11 +1,11 @@
 ﻿namespace Avigilon.Infrastructure.Services;
-public class TokenProvider(HttpClientProivider clientProivider) : ITokenProvider
+public class TokenProvider(IHttpClientProvider clientProivider) : ITokenProvider
 {
-    private readonly HttpClientProivider _clientProivider = clientProivider;
+    private readonly IHttpClientProvider _clientProvider = clientProivider;
 
     public async Task<string> GenerateSessionTokenAsync(string userNonce, string userKey, string userName, string userPassword, string clientName)
     {
-        var httpClient = _clientProivider.GetHttpClient();
+        var httpClient = _clientProvider.GetHttpClient();
 
         var generator = new AuthTokenGenerator(userNonce, userKey);
         var authToken = generator.GenerateToken();
