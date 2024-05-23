@@ -1,11 +1,13 @@
 
+using Avigilon.Core.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddScoped<HttpClientProivider>();
-builder.Services.AddScoped<TokenProvider>();
-builder.Services.AddScoped<HandleMediaResponse>();
+builder.Services.AddScoped<IHttpClientProvider, HttpClientProivider>();
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddScoped<IHandleMediaResponse, HandleMediaResponse>();
 
 
 

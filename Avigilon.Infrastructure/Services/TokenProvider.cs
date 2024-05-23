@@ -1,5 +1,5 @@
 ﻿namespace Avigilon.Infrastructure.Services;
-public class TokenProvider(HttpClientProivider clientProivider)
+public class TokenProvider(HttpClientProivider clientProivider) : ITokenProvider
 {
     private readonly HttpClientProivider _clientProivider = clientProivider;
 

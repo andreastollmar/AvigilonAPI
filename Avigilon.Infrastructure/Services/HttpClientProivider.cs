@@ -1,7 +1,6 @@
 ﻿namespace Avigilon.Infrastructure.Services;
-public class HttpClientProivider
+public class HttpClientProivider : IHttpClientProvider
 {
-
     public HttpClient GetHttpClient()
     {
         var httpClientHandler = new HttpClientHandler();
