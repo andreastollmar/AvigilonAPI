@@ -79,11 +79,8 @@
 
         }
 
-        [HttpGet("/getList {intervallInSeconds} {startDateTime} {endDateTime} {camera}")]
-        public async Task<IActionResult> GetListOfEntities([FromRoute] string intervallInSeconds, 
-                                                            [FromRoute] string startDateTime,
-                                                            [FromRoute] string endDateTime,
-                                                            [FromRoute] string camera)
+        [HttpPost("/getList")]
+        public async Task<IActionResult> GetListOfEntities([FromBody] RequestBodyContract bodyContract)
         {
             if (_session == null || _session == "")
                 _session = await _tokenProvider.GenerateSessionTokenAsync(
@@ -94,12 +91,12 @@
                     clientName);
 
             string[] cameraIds = [vd1, vd2, lrf];
-            var cameraId = camera.ToLower().Equals("vd1") ? vd1 : camera.ToLower().Equals("vd2") ? vd2 : lrf;
+            var cameraId = bodyContract.Camera.ToLower().Equals("vd1") ? vd1 : bodyContract.Camera.ToLower().Equals("vd2") ? vd2 : lrf;
 
             var httpClient = _httpClientProivider.GetHttpClient();
             httpClient.DefaultRequestHeaders.Add("Authorization", "x-avg-session " + _session);
 
-            Uri requestUri = new Uri(baseUri + $"timeline?session={_session}&cameraIds={cameraId}&scope={intervallInSeconds}_SECONDS&start={startDateTime}T06:00:00.0&end{endDateTime}T06:00:00.0&storage=ALL");
+            Uri requestUri = new Uri(baseUri + $"timeline?session={_session}&cameraIds={cameraId}&scope={bodyContract.Interval}_SECONDS&start={bodyContract.StartDate}T06:00:00.0&end{bodyContract.EndDate}T06:00:00.0&storage=ALL");
 
             HttpResponseMessage httpResponseMessage = await httpClient.GetAsync(requestUri);
             if (!httpResponseMessage.IsSuccessStatusCode)
