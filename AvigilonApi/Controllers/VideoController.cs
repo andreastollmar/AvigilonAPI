@@ -59,13 +59,10 @@ namespace AvigilonApi.Controllers
                     _configuration.GetValue("Avigilon:Login:Username", "Username"),
                     _configuration.GetValue("Avigilon:Login:Password", "Password"),
                     clientName);
-            if (_inputValidations.ValidateDateInputFromUser(bodyContract.StartDate))
-            {
-                if (_inputValidations.ValidateDateInputFromUser(bodyContract.EndDate))
-                {
-                    var result = await _avigilonApiCalls.GetListOfTimelines(_session, bodyContract);
-                    return Ok(result);
-                }
+            if (_inputValidations.ValidateDateInputFromUser(bodyContract.StartDate) && _inputValidations.ValidateDateInputFromUser(bodyContract.EndDate))
+            {     
+                var result = await _avigilonApiCalls.GetListOfTimelines(_session, bodyContract);
+                return Ok(result);                
             }
             return BadRequest();
 
