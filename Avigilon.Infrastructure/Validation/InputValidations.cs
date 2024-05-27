@@ -1,7 +1,5 @@
-﻿
-namespace Avigilon.Infrastructure.Validation;
-
-public class InputValidations
+﻿namespace Avigilon.Infrastructure.Validation;
+public class InputValidations : IInputValidations
 {
     public bool ValidateDateInputFromUser(string date)
     {
