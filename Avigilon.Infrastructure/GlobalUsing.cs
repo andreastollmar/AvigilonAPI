@@ -6,3 +6,5 @@ global using System.Net.Security;
 global using System.Security.Cryptography.X509Certificates;
 global using Avigilon.Core.Interfaces;
 global using Avigilon.Core.Models;
+global using System.Text.RegularExpressions;
+
