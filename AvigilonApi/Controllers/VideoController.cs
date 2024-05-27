@@ -1,14 +1,18 @@
-﻿namespace AvigilonApi.Controllers
+﻿using Avigilon.Infrastructure.Validation;
+
+namespace AvigilonApi.Controllers
 {
     [Microsoft.AspNetCore.Components.Route("api/[controller]")]
     [ApiController]
     public class VideoController(IConfiguration configuration, 
                                 ITokenProvider tokenProvider,
-                                IAvigilonApiCalls avigilonApiCalls) : ControllerBase
+                                IAvigilonApiCalls avigilonApiCalls,
+                                IInputValidations inputValidations) : ControllerBase
     {
         private readonly IConfiguration _configuration = configuration;
         private readonly ITokenProvider _tokenProvider = tokenProvider;
         private readonly IAvigilonApiCalls _avigilonApiCalls = avigilonApiCalls;
+        private readonly IInputValidations _inputValidations = inputValidations;
         public readonly string clientName = "WebEndpointClient";
         private string? _session;
 
@@ -36,11 +40,13 @@
                    _configuration.GetValue("Avigilon:Login:Username", "Username"),
                    _configuration.GetValue("Avigilon:Login:Password", "Password"),
                    clientName);            
+            if (_inputValidations.ValidateDateInputFromUser(date))
+            {
+                var isSuccess = await _avigilonApiCalls.SaveMediafile(_session, time, date, camera, isImg);
 
-            var isSuccess = await _avigilonApiCalls.SaveMediafile(_session, time, date, camera, isImg);
-
-            return isSuccess ? Ok("Saved file successfully") : BadRequest("Failed to save media");
-
+                return isSuccess ? Ok("Saved file successfully") : BadRequest("Failed to save media");
+            }
+            return BadRequest();
         }
 
         [HttpPost("/getList")]
@@ -53,10 +59,16 @@
                     _configuration.GetValue("Avigilon:Login:Username", "Username"),
                     _configuration.GetValue("Avigilon:Login:Password", "Password"),
                     clientName);
-            
-            var result = await _avigilonApiCalls.GetListOfTimelines(_session, bodyContract);
+            if (_inputValidations.ValidateDateInputFromUser(bodyContract.StartDate))
+            {
+                if (_inputValidations.ValidateDateInputFromUser(bodyContract.EndDate))
+                {
+                    var result = await _avigilonApiCalls.GetListOfTimelines(_session, bodyContract);
+                    return Ok(result);
+                }
+            }
+            return BadRequest();
 
-            return Ok(result);
         }
 
     }
