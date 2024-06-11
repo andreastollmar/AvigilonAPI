@@ -1,137 +1,119 @@
 import "./App.css";
-import { TimelineRequestBody } from "../types/TimelineRequestBody";
-import { CameraTimeline, Record } from "../types/Timeline";
 import { useState } from "react";
+import { MediaRequestContract } from "../types/MediaRequestContract";
+import { SaveMediaFromApi } from "./API/saveMediaFromApi";
 
 function App() {
-  const [inputRequestBody, setInputRequestBody] = useState<TimelineRequestBody>(
-    {
-      startDate: "",
-      endDate: "",
-      interval: "",
-      camera: "",
-    }
-  );
-  const [timeLines, setTimelines] = useState<CameraTimeline[] | null>(null);
-  const [errorMessage, setErrorMessage] = useState();
+  const [mediaRequest, setMediaRequest] = useState<MediaRequestContract>({
+    camera: '',
+    isImg: false,
+    requestBody: [{ date: '', time: '' }],
+  });
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target;
-    setInputRequestBody((prevState) => ({
-      ...prevState,
-      [name]: value,
+  const [successMsg, setSuccessMsg] = useState<string | undefined>();
+  const [errorMsg, setErrorMsg] = useState<string | undefined>();
+
+  const handleAddRow = () => {
+    setMediaRequest(prev => ({
+      ...prev,
+      requestBody: [...prev.requestBody, { date: '', time: '' }]
     }));
-  }
+  };
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const handleRemoveRow = (index: number) => {
+    setMediaRequest(prev => ({
+      ...prev,
+      requestBody: prev.requestBody.filter((_, idx) => idx !== index)
+    }));
+  };
+
+  const handleChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setMediaRequest(prev => ({
+      ...prev,
+      requestBody: prev.requestBody.map((item, idx) => 
+        idx === index ? { ...item, [name]: value } : item
+      )
+    }));
+  };
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMediaRequest(prev => ({
+      ...prev,
+      isImg: event.target.checked
+    }));
+  };
+
+  const handleCameraChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMediaRequest(prev => ({
+      ...prev,
+      camera: event.target.value
+    }));
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(inputRequestBody);
-    getTimeline();
-  }
-
-  function getTimeline() {
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(inputRequestBody),
-    };
-    const fetchData = async () => {
-      const response = await fetch(
-        "https://localhost:44390/getList",
-        requestOptions
-      );
-
-      if (!response.ok) {
-        const errorFromFetch = await response.json();
-        setErrorMessage(errorFromFetch);
-      } else {
-        const data = (await response.json()) as CameraTimeline[];
-        console.log(data);
-        setTimelines(data);
-      }
-    };
-    fetchData();
-    console.log("Running get Timeline api call");
-    console.log(timeLines);
-  }
+    
+    const result = await SaveMediaFromApi(mediaRequest);
+    if (result.errorMsg) {
+      setErrorMsg(result.errorMsg);
+      setSuccessMsg(undefined);
+    } else if (result.successMsg) {
+      setSuccessMsg(result.successMsg);
+      setErrorMsg(undefined);
+    }
+  };
 
   return (
     <>
       <form onSubmit={handleSubmit}>
+        {mediaRequest.requestBody.map((input, index) => (
+          <div key={index}>
+            <input
+              type="text"
+              name="date"
+              value={input.date}
+              onChange={(event) => handleChange(index, event)}
+              placeholder="Date"
+            />
+            <input
+              type="text"
+              name="time"
+              value={input.time}
+              onChange={(event) => handleChange(index, event)}
+              placeholder="Time"
+            />
+            <button type="button" onClick={() => handleRemoveRow(index)}>
+              Remove
+            </button>
+          </div>
+        ))}
+        <button type="button" onClick={handleAddRow}>Add Row</button>
         <div>
           <input
-            type="text"
-            name="startDate"
-            value={inputRequestBody.startDate}
-            onChange={handleChange}
-            placeholder="Start Date"
+            type="checkbox"
+            name="isImg"
+            checked={mediaRequest.isImg}
+            onChange={handleCheckboxChange}
           />
-          <input
-            type="text"
-            name="endDate"
-            value={inputRequestBody.endDate}
-            onChange={handleChange}
-            placeholder="End Date"
-          />
-          <input
-            type="text"
-            name="interval"
-            value={inputRequestBody.interval}
-            onChange={handleChange}
-            placeholder="Interval"
-          />
+          <label htmlFor="isImg">Img?</label>
+        </div>
+        <div>
           <input
             type="text"
             name="camera"
-            value={inputRequestBody.camera}
-            onChange={handleChange}
+            value={mediaRequest.camera}
+            onChange={handleCameraChange}
             placeholder="Camera"
           />
-          <button type="submit">Get Timeline</button>
         </div>
+        <button type="submit">Save media files</button>
       </form>
 
-      {timeLines && (
-        <div>
-          <div>{timeLines[0].cameraId}</div>
-          <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {timeLines[0].record.map(
-                (record: Record, recordIndex: number) => {
-                  const startDateFormatted = new Date(record.start)
-                    .toISOString()
-                    .replace("T", " ")
-                    .split(".")[0];
-                  const endDateFormatted = new Date(record.end)
-                    .toISOString()
-                    .replace("T", " ")
-                    .split(".")[0];
-                  return (
-                    <tr key={recordIndex}>
-                      <td>{startDateFormatted}</td>
-                      <td>{endDateFormatted}</td>
-                      <td>
-                        <button>Action</button>
-                      </td>
-                    </tr>
-                  );
-                }
-              )}
-            </tbody>
-          </table>
-          </div>
-        </div>
-      )}
+      {/* <div>
+        {successMsg && <div>{successMsg}</div>}
+        {errorMsg && <div>{errorMsg}</div>}
+      </div> */}
     </>
   );
 }
