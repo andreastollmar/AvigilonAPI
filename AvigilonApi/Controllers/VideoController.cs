@@ -16,6 +16,7 @@ namespace AvigilonApi.Controllers
         private readonly IInputValidations _inputValidations = inputValidations;
         public readonly string clientName = "WebEndpointClient";
         private string? _session;
+        private string? successMessageSaveMedia;
 
         [HttpGet("/Cameras")]
         public async Task<List<CameraContract>> GetVideos()
@@ -55,7 +56,7 @@ namespace AvigilonApi.Controllers
 
             await Task.WhenAll(tasks);
 
-            return Ok(successMessage);
+            return Ok(successMessageSaveMedia);
             
         }
         private async Task HandleMediaSavingAsync(RequestMediaContract item, string camera, bool isImg, string successMessage)
@@ -64,11 +65,11 @@ namespace AvigilonApi.Controllers
 
             if (isSuccess)
             {
-                successMessage += "Saved file successfully\n";
+                successMessageSaveMedia += "Saved file successfully\n";
             }
             else
             {
-                successMessage += "Error when saving file\n";
+                successMessageSaveMedia += "Error when saving file\n";
             }
         }
 
