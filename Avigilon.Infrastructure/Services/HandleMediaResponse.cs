@@ -2,7 +2,7 @@
 
 public class HandleMediaResponse : IHandleMediaResponse
 {
-    public async Task<bool> SaveMediaResponse(string camera, byte[] mediaData, bool isImg)
+    public async Task<bool> SaveMediaResponse(string camera, byte[] mediaData, bool isImg, string date, string time)
     {
         var userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         var downloadsFolderPath = Path.Combine(userProfilePath, "Downloads");
@@ -27,7 +27,7 @@ public class HandleMediaResponse : IHandleMediaResponse
             {
                 Directory.CreateDirectory(downloadsFolderPath);
             }
-            var fileName = $"{camera}_" + DateTime.Now.ToShortTimeString() + ".mp4";
+            var fileName = $"{camera}_" + $"{date}:{time}" + ".mp4";
             fileName = fileName.Replace(":", "_");
             string filePath = Path.Combine(downloadsFolderPath, fileName);
 

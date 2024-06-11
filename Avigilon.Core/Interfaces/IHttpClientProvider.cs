@@ -1,5 +1,5 @@
 ﻿namespace Avigilon.Core.Interfaces;
 public interface IHttpClientProvider
 {
-    HttpClient GetHttpClient();
+    HttpClient GetHttpClient(string session);
 }

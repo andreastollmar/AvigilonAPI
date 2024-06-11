@@ -1,4 +1,5 @@
 ﻿using Avigilon.Infrastructure.Validation;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AvigilonApi.Controllers
 {
@@ -30,23 +31,45 @@ namespace AvigilonApi.Controllers
             return cameras;
         }        
 
-        [HttpGet("/mediaQuery {date} {time} {camera} {isImg}")]
-        public async Task<IActionResult> GetMediaFromApi([FromRoute] string date, [FromRoute] string time, [FromRoute] string camera, [FromRoute] bool isImg)
+        [HttpPost("/mediaQuery {camera} {isImg}")]
+        public async Task<IActionResult> GetMediaFromApi([FromBody] List<RequestMediaContract> dateTimes, [FromRoute] string camera, [FromRoute] bool isImg)
         {
+            var successMessage = "";
             if (_session == null || _session == "")
                _session = await _tokenProvider.GenerateSessionTokenAsync(
                    _configuration.GetValue("Avigilon:Secretkeys:Usernonce", "Usernonce"),
                    _configuration.GetValue("Avigilon:Secretkeys:Userkey", "Userkey"),
                    _configuration.GetValue("Avigilon:Login:Username", "Username"),
                    _configuration.GetValue("Avigilon:Login:Password", "Password"),
-                   clientName);            
-            if (_inputValidations.ValidateDateInputFromUser(date))
-            {
-                var isSuccess = await _avigilonApiCalls.SaveMediafile(_session, time, date, camera, isImg);
+                   clientName);
 
-                return isSuccess ? Ok("Saved file successfully") : BadRequest("Failed to save media");
+            var tasks = new List<Task>();
+
+            foreach (var item in dateTimes)
+            {                
+                if (_inputValidations.ValidateDateInputFromUser(item.StartDate))
+                {
+                    tasks.Add(HandleMediaSavingAsync(item, camera, isImg, successMessage));
+                }
             }
-            return BadRequest();
+
+            await Task.WhenAll(tasks);
+
+            return Ok(successMessage);
+            
+        }
+        private async Task HandleMediaSavingAsync(RequestMediaContract item, string camera, bool isImg, string successMessage)
+        {
+            var isSuccess = await _avigilonApiCalls.SaveMediafile(_session, item.Time, item.StartDate, camera, isImg);
+
+            if (isSuccess)
+            {
+                successMessage += "Saved file successfully\n";
+            }
+            else
+            {
+                successMessage += "Error when saving file\n";
+            }
         }
 
         [HttpPost("/getList")]
