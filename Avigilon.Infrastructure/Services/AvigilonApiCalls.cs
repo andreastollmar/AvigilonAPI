@@ -68,7 +68,10 @@ public class AvigilonApiCalls(IHttpClientProvider httpClientProivider, IHandleMe
     {
         var httpClient = _httpClientProvider.GetHttpClient(session);
 
-        var content = new StringContent(session, Encoding.UTF8, "application/json");
+        var requestBody = new LogoutRequest { Session = session };
+        var jsonContent = JsonSerializer.Serialize(requestBody);
+
+        var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
         var response = await httpClient.PostAsync(baseUri + "logout", content);
         if (response.IsSuccessStatusCode)
         {
