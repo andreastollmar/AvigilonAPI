@@ -1,7 +1,4 @@
-﻿using Avigilon.Infrastructure.Validation;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace AvigilonApi.Controllers
+﻿namespace AvigilonApi.Controllers
 {
     [Microsoft.AspNetCore.Components.Route("api/[controller]")]
     [ApiController]
@@ -16,7 +13,6 @@ namespace AvigilonApi.Controllers
         private readonly IInputValidations _inputValidations = inputValidations;
         public readonly string clientName = "WebEndpointClient";
         private string? _session;
-        private string? successMessageSaveMedia;
 
         [HttpGet("/Cameras")]
         public async Task<List<CameraContract>> GetVideos()
@@ -32,8 +28,8 @@ namespace AvigilonApi.Controllers
             return cameras;
         }        
 
-        [HttpPost("/mediaQuery {camera} {isImg}")]
-        public async Task<IActionResult> GetMediaFromApi([FromBody] List<RequestMediaContract> dateTimes, [FromRoute] string camera, [FromRoute] bool isImg)
+        [HttpPost("/saveMedia {camera} {isImg}")]
+        public async Task<IActionResult> GetMediaFromApi([FromBody] List<RequestMediaContract> mediaToSave, [FromRoute] string camera, [FromRoute] bool isImg)
         {
             var successMessage = "";
             if (_session == null || _session == "")
@@ -46,7 +42,7 @@ namespace AvigilonApi.Controllers
 
             var tasks = new List<Task>();
 
-            foreach (var item in dateTimes)
+            foreach (var item in mediaToSave)
             {                
                 if (_inputValidations.ValidateDateInputFromUser(item.StartDate))
                 {
@@ -56,24 +52,18 @@ namespace AvigilonApi.Controllers
 
             await Task.WhenAll(tasks);
 
-            return Ok(successMessageSaveMedia);
+            var userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            var downloadsFolderPath = Path.Combine(userProfilePath, "Downloads");
+
+            return Ok("Media saved at: " + downloadsFolderPath);
             
         }
         private async Task HandleMediaSavingAsync(RequestMediaContract item, string camera, bool isImg, string successMessage)
         {
-            var isSuccess = await _avigilonApiCalls.SaveMediafile(_session, item.Time, item.StartDate, camera, isImg);
-
-            if (isSuccess)
-            {
-                successMessageSaveMedia += "Saved file successfully\n";
-            }
-            else
-            {
-                successMessageSaveMedia += "Error when saving file\n";
-            }
+            await _avigilonApiCalls.SaveMediafile(_session, item.Time, item.StartDate, camera, isImg);
         }
 
-        [HttpPost("/getList")]
+        [HttpPost("/getTimeline")]
         public async Task<IActionResult> GetListOfEntities([FromBody] RequestBodyContract bodyContract)
         {
             if (_session == null || _session == "")

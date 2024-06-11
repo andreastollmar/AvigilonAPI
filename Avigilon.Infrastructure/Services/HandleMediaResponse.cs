@@ -12,7 +12,7 @@ public class HandleMediaResponse : IHandleMediaResponse
             {
                 Directory.CreateDirectory(downloadsFolderPath);
             }
-            var fileName = $"{camera}_" + DateTime.Now.ToShortTimeString() + ".jpeg";
+            var fileName = $"{camera}_" + $"{date}:{time}" + ".jpeg";
             fileName = fileName.Replace(":", "_");
             string filePath = Path.Combine(downloadsFolderPath, fileName);
 
