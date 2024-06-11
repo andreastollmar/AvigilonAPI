@@ -1,4 +1,8 @@
-﻿namespace AvigilonApi.Controllers
+﻿using Microsoft.AspNetCore.Authorization;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+
+namespace AvigilonApi.Controllers
 {
     [Microsoft.AspNetCore.Components.Route("api/[controller]")]
     [ApiController]
@@ -13,6 +17,7 @@
         private readonly IInputValidations _inputValidations = inputValidations;
         public readonly string clientName = "WebEndpointClient";
         private string? _session;
+        private string? _savedFiles;
 
         [HttpGet("/Cameras")]
         public async Task<List<CameraContract>> GetVideos()
@@ -26,10 +31,10 @@
             
             var cameras = await client.GetCameras();
             return cameras;
-        }        
-
-        [HttpPost("/saveMedia {camera} {isImg}")]
-        public async Task<IActionResult> GetMediaFromApi([FromBody] List<RequestMediaContract> mediaToSave, [FromRoute] string camera, [FromRoute] bool isImg)
+        }
+        [AllowAnonymous]
+        [HttpPost("/saveMedia")]
+        public async Task<IActionResult> GetMediaFromApi([FromBody] RequestMediaContract requestMedia)
         {
             var successMessage = "";
             if (_session == null || _session == "")
@@ -42,11 +47,11 @@
 
             var tasks = new List<Task>();
 
-            foreach (var item in mediaToSave)
+            foreach (var item in requestMedia.RequestMediaBodyContracts)
             {                
-                if (_inputValidations.ValidateDateInputFromUser(item.StartDate))
+                if (_inputValidations.ValidateDateInputFromUser(item.Date))
                 {
-                    tasks.Add(HandleMediaSavingAsync(item, camera, isImg, successMessage));
+                    tasks.Add(HandleMediaSavingAsync(item, requestMedia.Camera, requestMedia.IsImg, successMessage));
                 }
             }
 
@@ -55,12 +60,20 @@
             var userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             var downloadsFolderPath = Path.Combine(userProfilePath, "Downloads");
 
-            return Ok("Media saved at: " + downloadsFolderPath);
+            return Ok(_savedFiles + "Media saved at: " + downloadsFolderPath);
             
         }
-        private async Task HandleMediaSavingAsync(RequestMediaContract item, string camera, bool isImg, string successMessage)
+        private async Task HandleMediaSavingAsync(RequestMediaBodyContract item, string camera, bool isImg, string successMessage)
         {
-            await _avigilonApiCalls.SaveMediafile(_session, item.Time, item.StartDate, camera, isImg);
+            var success = await _avigilonApiCalls.SaveMediafile(_session, item.Time, item.Date, camera, isImg);
+            if(success)
+            {
+                _savedFiles += $"Saved file successfully {item.Date} - {item.Time}\n";
+            }
+            else
+            {
+                _savedFiles += $"Saved file failed or no video at given timestamp {item.Date} - {item.Time}\n";
+            }
         }
 
         [HttpPost("/getTimeline")]
@@ -80,6 +93,21 @@
             }
             return BadRequest();
 
+        }
+
+        [HttpPost("/Logout")]
+        public async Task<IActionResult> Logout()
+        {            
+            if (_session == null || _session == "")
+            {
+                return BadRequest();
+            }
+            var logoutSuccess = await _avigilonApiCalls.Logout(_session);
+            if (logoutSuccess)
+            {
+                return Ok("Logged out");
+            }
+            return BadRequest("Logout failed");
         }
 
     }
