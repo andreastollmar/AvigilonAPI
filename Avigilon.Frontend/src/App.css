@@ -1,18 +1,58 @@
-.table-container {
-  border: 1px solid #ccc;
+
+.content{
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
 }
 
-table {
-  border-collapse: collapse;
-  width: 100%;
+.input_div{
+  margin-bottom: .3rem;
+}
+.input_date{
+  width: 7rem;
+}
+.input_time{
+  width: 7rem;
+  margin-left: .3rem;
+  padding: 1px 2px;
+}
+.camera_img_div{
+  display: flex;
+  justify-content: space-between;
+  margin: .5rem 0 2rem 0;
 }
 
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
+.input_camera{
+  width: 4rem;
+  text-align: center;
+  margin-left: .4rem;
 }
 
-th {
-  background-color: #f2f2f2;
+.submit_btn_div{
+  display: flex;
+  justify-content: center;
+}
+
+.msg_div{
+  display: flex;
+  justify-content: center;
+}
+
+.remove_button{
+  background-color: rgba(250, 0, 0, .5);
+  border-radius: .2rem;
+  margin-left: 1rem;
+}
+
+.add_row_btn{
+  background-color: rgba(0, 190, 155, .5);
+  border-radius: .2rem;
+}
+
+.submit_button{
+  background-color: rgba(105, 128, 255, 0.733);
+  margin-bottom: 2rem;
+}
+
+.msg_div{
 }

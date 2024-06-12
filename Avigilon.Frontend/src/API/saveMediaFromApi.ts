@@ -15,13 +15,13 @@ export async function SaveMediaFromApi(request: MediaRequestContract) {
       const errorFromFetch = await response.json();
       return { errorMsg: errorFromFetch };
     } else {
-      const data = await response.json();
-      console.log(data);
-      return { successMsg: data };
+      const dataFromFetch = await response.json();
+      console.log(dataFromFetch);
+      return { successMsg: dataFromFetch};
     }
   } catch (error) {
+    console.log(error as string)
     if (error instanceof Error) {
-        console.log(error)
       return { errorMsg: error.message };
     } else {
       return { errorMsg: "An error occurred while fetching data." };

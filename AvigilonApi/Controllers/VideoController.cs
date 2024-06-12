@@ -14,7 +14,7 @@ namespace AvigilonApi.Controllers
         private readonly IInputValidations _inputValidations = inputValidations;
         public readonly string clientName = "WebEndpointClient";
         private static string? _session;
-        private string? _savedFiles;
+        private SuccessMsg _savedFiles = new SuccessMsg();
 
         [HttpGet("/Cameras")]
         public async Task<List<CameraContract>> GetVideos()
@@ -56,8 +56,8 @@ namespace AvigilonApi.Controllers
 
             var userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             var downloadsFolderPath = Path.Combine(userProfilePath, "Downloads");
-
-            return Ok(_savedFiles + "Media saved at: " + downloadsFolderPath);
+            _savedFiles.SaveLocation = downloadsFolderPath;
+            return Ok(_savedFiles);
             
         }
         private async Task HandleMediaSavingAsync(RequestMediaBodyContract item, string camera, bool isImg, string successMessage)
@@ -65,11 +65,11 @@ namespace AvigilonApi.Controllers
             var success = await _avigilonApiCalls.SaveMediafile(_session, item.Time, item.Date, camera, isImg);
             if(success)
             {
-                _savedFiles += $"Saved file successfully {item.Date} - {item.Time}\n";
+                _savedFiles.FileSaved.Add($"Saved file successfully {item.Date} - {item.Time}\n");
             }
             else
             {
-                _savedFiles += $"Saved file failed or no video at given timestamp {item.Date} - {item.Time}\n";
+                _savedFiles.FileSaved.Add($"Saved file failed or no video at given timestamp {item.Date} - {item.Time}\n");
             }
         }
 
