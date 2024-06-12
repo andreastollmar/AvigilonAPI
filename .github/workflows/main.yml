@@ -15,3 +15,5 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore
+      - name: Run UnitTests
+        run: dotnet test Avigilon.Tests/Avigilon.Tests.csproj --no-build
