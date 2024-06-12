@@ -1,13 +1,11 @@
 ﻿namespace Avigilon.Infrastructure.Services;
-public class TokenProvider : ITokenProvider
+public class TokenProvider(IHttpClientProvider httpClientProvider) : ITokenProvider
 {
+    private readonly IHttpClientProvider _httpClientProvider = httpClientProvider;
+
     public async Task<string> GenerateSessionTokenAsync(string userNonce, string userKey, string userName, string userPassword, string clientName)
     {
-        var httpClientHandler = new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = (HttpRequestMessage _, X509Certificate2 _, X509Chain _, SslPolicyErrors _) => true
-        };
-        var httpClient = new HttpClient(httpClientHandler);
+        var httpClient = _httpClientProvider.GetRegularClient();
 
         var generator = new AuthTokenGenerator(userNonce, userKey);
         var authToken = generator.GenerateToken();

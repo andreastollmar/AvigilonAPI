@@ -66,7 +66,8 @@ public class AvigilonApiCalls(IHttpClientProvider httpClientProivider, IHandleMe
     }
     public async Task<bool> Logout(string session)
     {
-        var httpClient = _httpClientProvider.GetHttpClient(session);
+        var httpClient = _httpClientProvider.GetRegularClient();
+        
 
         var requestBody = new LogoutRequest { Session = session };
         var jsonContent = JsonSerializer.Serialize(requestBody);

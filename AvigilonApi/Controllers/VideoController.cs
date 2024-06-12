@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
-
+﻿
 namespace AvigilonApi.Controllers
 {
     [Microsoft.AspNetCore.Components.Route("api/[controller]")]
@@ -16,7 +13,7 @@ namespace AvigilonApi.Controllers
         private readonly IAvigilonApiCalls _avigilonApiCalls = avigilonApiCalls;
         private readonly IInputValidations _inputValidations = inputValidations;
         public readonly string clientName = "WebEndpointClient";
-        private string? _session;
+        private static string? _session;
         private string? _savedFiles;
 
         [HttpGet("/Cameras")]
@@ -105,6 +102,7 @@ namespace AvigilonApi.Controllers
             var logoutSuccess = await _avigilonApiCalls.Logout(_session);
             if (logoutSuccess)
             {
+                _session = null;
                 return Ok("Logged out");
             }
             return BadRequest("Logout failed");

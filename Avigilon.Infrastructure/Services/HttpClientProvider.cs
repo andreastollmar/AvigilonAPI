@@ -26,4 +26,15 @@ public class HttpClientProvider : IHttpClientProvider
         }
         return _httpClient;
     }
+
+    public HttpClient GetRegularClient()
+    {
+        var httpClientHandler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (HttpRequestMessage _, X509Certificate2 _, X509Chain _, SslPolicyErrors _) => true
+        };
+        var httpClient = new HttpClient(httpClientHandler);
+
+        return httpClient;
+    }
 }
