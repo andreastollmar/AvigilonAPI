@@ -1,5 +1,9 @@
-﻿namespace Avigilon.Infrastructure.Services;
-public class AvigilonApiCalls(IHttpClientProvider httpClientProivider, IHandleMediaResponse handleMediaResponse) : IAvigilonApiCalls
+﻿using System.ComponentModel;
+
+namespace Avigilon.Infrastructure.Services;
+public class AvigilonApiCalls(IHttpClientProvider httpClientProivider,
+                              IHandleMediaResponse handleMediaResponse,
+                              DateTimeConverter dateTimeConverter) : IAvigilonApiCalls
 {
     public readonly string clientName = "WebEndpointClient";
     public readonly string baseUri = "https://srv03367:8443/mt/api/rest/v1/";
@@ -9,6 +13,7 @@ public class AvigilonApiCalls(IHttpClientProvider httpClientProivider, IHandleMe
 
     private readonly IHttpClientProvider _httpClientProvider = httpClientProivider;
     private readonly IHandleMediaResponse _handleMediaResponse = handleMediaResponse;
+    private readonly DateTimeConverter _dateTimeConverter = dateTimeConverter;
 
     public async Task<List<CameraTimeline>> GetListOfTimelines(string session, RequestBodyContract bodyContract)
     {
@@ -33,11 +38,12 @@ public class AvigilonApiCalls(IHttpClientProvider httpClientProivider, IHandleMe
     public async Task<bool> SaveMediafile(string session, string time, string date, string camera, bool isImg)
     {
         var httpClient = _httpClientProvider.GetHttpClient(session);
-        //httpClient.DefaultRequestHeaders.Add("Authorization", "x-avg-session " + session);
+
         var dateTime = "live";
         if (!time.Equals("live"))
         {
-            dateTime = date + "T" + time + ".057Z,c";
+            dateTime = _dateTimeConverter.ConvertDateTimeToUtc(date, time);
+            dateTime = dateTime + ",c";
         }
 
         var content = (new MediaContract
