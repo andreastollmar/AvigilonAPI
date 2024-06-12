@@ -33,7 +33,6 @@ namespace AvigilonApi.Controllers
         [HttpPost("/saveMedia")]
         public async Task<IActionResult> GetMediaFromApi([FromBody] RequestMediaContract requestMedia)
         {
-            var successMessage = "";
             if (_session == null || _session == "")
                _session = await _tokenProvider.GenerateSessionTokenAsync(
                    _configuration.GetValue("Avigilon:Secretkeys:Usernonce", "Usernonce"),
@@ -46,9 +45,11 @@ namespace AvigilonApi.Controllers
 
             foreach (var item in requestMedia.RequestMediaBodyContracts)
             {                
-                if (_inputValidations.ValidateDateInputFromUser(item.Date))
+                if (_inputValidations.ValidateDateInputFromUser(item.Date) && 
+                    _inputValidations.ValidateTimeInputFromUser(item.Time) && 
+                    _inputValidations.ValidateCameraChoiceFromUser(requestMedia.Camera))
                 {
-                    tasks.Add(HandleMediaSavingAsync(item, requestMedia.Camera, requestMedia.IsImg, successMessage));
+                    tasks.Add(HandleMediaSavingAsync(item, requestMedia.Camera, requestMedia.IsImg));
                 }
             }
 
@@ -60,7 +61,7 @@ namespace AvigilonApi.Controllers
             return Ok(_savedFiles);
             
         }
-        private async Task HandleMediaSavingAsync(RequestMediaBodyContract item, string camera, bool isImg, string successMessage)
+        private async Task HandleMediaSavingAsync(RequestMediaBodyContract item, string camera, bool isImg)
         {
             var success = await _avigilonApiCalls.SaveMediafile(_session, item.Time, item.Date, camera, isImg);
             if(success)

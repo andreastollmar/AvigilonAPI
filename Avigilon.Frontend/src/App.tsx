@@ -80,7 +80,7 @@ function App() {
                 className="input_date"
                 value={input.date}
                 onChange={(event) => handleChange(index, event)}
-                placeholder="Date"
+                placeholder="Date yyyy-mm-dd"
               />
               <input
                 type="text"
@@ -88,7 +88,7 @@ function App() {
                 className="input_time"
                 value={input.time}
                 onChange={(event) => handleChange(index, event)}
-                placeholder="Time"
+                placeholder="Time hh:mm:ss"
               />
               <button
                 type="button"
@@ -122,7 +122,7 @@ function App() {
                 className="input_camera"
                 value={mediaRequest.camera}
                 onChange={handleCameraChange}
-                placeholder="Camera"
+                placeholder="vd1/vd2/lrf"
               />
             </div>
           </div>
